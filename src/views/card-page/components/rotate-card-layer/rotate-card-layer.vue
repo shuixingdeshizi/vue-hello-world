@@ -1,19 +1,21 @@
 <template>
   <div class="wrapper" v-show="isShow">
     <div class="mask"></div>
-    <div class="container">
-      <div class="card" :class="rotateClass">
-        <div class="face front-face" @click="toggleRotate">
-          <img class="face" src="./img/card_front_face.png">
+    <transition name="scale-fade" @after-leave="afterLeave">
+      <div class="container" v-show="isShow">
+        <div class="card" :class="rotateClass">
+          <div class="face front-face" @click="toggleRotate">
+            <img class="face" src="./img/card_front_face.png">
+          </div>
+          <div class="face back-face" @click="toggleRotate">
+            <img class="card-img" src="./img/card_back_face.png">
+          </div>
         </div>
-        <div class="face back-face" @click="toggleRotate">
-          <img class="card-img" src="./img/card_back_face.png">
+        <div class="close-wrapper">
+          <close @click="closeLayer"></close>
         </div>
       </div>
-      <div class="close-wrapper">
-        <close @click="closeLayer"></close>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -34,18 +36,26 @@
     },
     methods: {
       toggleRotate () {
-        console.log(!!this.rotateClass)
         this.rotateClass = this.rotateClass ? '' : 'rotate180'
-        console.log(this.rotateClass)
       },
       closeLayer () {
         this.$emit('update:isShow', false)
+      },
+      afterLeave () {
+        this.$emit('afterLeave', null)
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  .scale-fade-enter-active, .scale-fade-leave-active {
+    transition: all 2s ease;
+  }
+  .scale-fade-enter, .scale-fade-leave-to {
+    opacity: 0;
+    transform: scale(0);
+  }
   .wrapper {
     position: fixed;
     top: 0;
@@ -78,7 +88,7 @@
       top: 0;
       width: 100%;
       height: 100%;
-      transition: transform .2s ease;
+      transition: transform 2s ease;
       backface-visibility: hidden;
       .card-img {
         width: 100%;

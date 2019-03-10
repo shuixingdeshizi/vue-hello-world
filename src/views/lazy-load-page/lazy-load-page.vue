@@ -1,6 +1,12 @@
 <template>
   <div id="scroller" class="wrapper">
     <div class="container">
+      <ul>
+        <li 
+          v-for="(item, index) in cards"
+          :key="index"
+          ></li>
+      </ul>
       <item 
         v-for="(item, index) in cards" 
         :item="item"
@@ -40,7 +46,7 @@
     methods: {
       fetchList (page = 1) {
         let params = {
-          containerId: '102803_ctg1_5088_-_ctg1_5088',
+          containerId: '102803_ctg1_5188_-_ctg1_5188',
           sinceId: page,
           openApp: 0
         }

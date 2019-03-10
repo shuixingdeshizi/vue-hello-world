@@ -8,9 +8,11 @@
     </button>
 
     <card-layer 
-      :isShow.sync="isShowCard"></card-layer>
+      :isShow.sync="isShowCard"
+      @afterLeave="queneNext"></card-layer>
     <rotate-card-layer
-      :isShow.sync="isShowRotateCardLayer">
+      :isShow.sync="isShowRotateCardLayer"
+      @afterLeave="queneNext">
     </rotate-card-layer>
   </div>
 </template>
@@ -27,7 +29,50 @@
     data () {
       return {
         isShowCard: false,
-        isShowRotateCardLayer: true
+        isShowRotateCardLayer: false,
+        quene: []
+      }
+    },
+    created () {
+      class Quene {
+        constructor () {
+          this.taskList = []
+        }
+        push (fn) {
+          this.taskList.push(fn)
+          return this
+        }
+        start () {
+          let taskList = this.taskList
+          if (taskList.length > 0) {
+            taskList.shift()()
+          }
+          return this
+        }
+        next () {
+          let taskList = this.taskList
+          if (taskList.length > 0) {
+            taskList.shift()()
+          }
+          return this
+        }
+      }
+      this.quene = new Quene()
+      this.quene.push(() => {
+        this.isShowCard = true
+      })
+      .push(() => {
+        this.isShowRotateCardLayer = true
+      })
+
+    },
+    mounted () {
+      this.quene.start()
+    },
+    methods: {
+      queneNext () {
+        console.log('test')
+        this.quene.next()
       }
     }
   }

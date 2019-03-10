@@ -1,5 +1,5 @@
 <template>
-  <transition name="scale-fade">
+  <transition name="scale-fade" @after-leave="afterLeave">
     <div class="card-layer" v-if="isShow">
       <div class="mask" @click="hideLayer"></div>
       <div class="card-container">
@@ -26,7 +26,9 @@
     methods: {
       hideLayer () {
         this.$emit('update:isShow', false)
-        console.log('aa')
+      },
+      afterLeave () {
+        this.$emit('afterLeave', null)
       }
     }
   }
